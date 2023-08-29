@@ -4,6 +4,7 @@ import { create, ellipsisHorizontal, ellipsisVertical, helpCircle, search, perso
 import Snackbar from '@mui/material/Snackbar';
 
 import './AppBar.css';
+import { LENGTH_MEDIUM } from '../commons/Constants';
 
 export type AppBarProps = {
   title?: string;
@@ -16,25 +17,25 @@ const AppBar: React.FC<AppBarProps> = (props: AppBarProps) => {
   }
   return (
     <>
-    <IonHeader>
-      <IonToolbar>
-        <IonButtons slot="start">
-          <IonBackButton></IonBackButton>
-        </IonButtons>
-        <IonTitle>{props.title || ''}</IonTitle>
-        <IonButtons slot="end">
-          <IonButton onClick={handleMenuClick}>
-            <IonIcon slot="icon-only" ios={ellipsisHorizontal} md={ellipsisVertical}></IonIcon>
-          </IonButton>
-        </IonButtons>
-      </IonToolbar>
-    </IonHeader>
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonBackButton></IonBackButton>
+          </IonButtons>
+          <IonTitle>{props.title || ''}</IonTitle>
+          <IonButtons slot="end">
+            <IonButton onClick={handleMenuClick}>
+              <IonIcon slot="icon-only" ios={ellipsisHorizontal} md={ellipsisVertical}></IonIcon>
+            </IonButton>
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
       <Snackbar
         open={open}
-        autoHideDuration={3000}
+        autoHideDuration={LENGTH_MEDIUM}
         message="Implement this"
       />
-      </>
+    </>
   );
 }
 

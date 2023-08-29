@@ -10,3 +10,10 @@ ion-button {
     --padding-top: 20px;
     --padding-bottom: 20px; */
   }
+
+  .clsss {
+    vertical-align: middle;
+    align-items: center;
+    align-self: center;
+    align-content: center;
+  }
