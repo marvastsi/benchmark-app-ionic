@@ -5,6 +5,7 @@ import { Redirect, Route } from 'react-router';
 import Login from './pages/Login/Login';
 import Execution from './pages/Execution/Execution';
 import { IonReactRouter } from '@ionic/react-router';
+import Account from './pages/Account/Account';
 
 const Main: React.FC = () => (
   <>
@@ -16,6 +17,7 @@ const Main: React.FC = () => (
           <Route exact path="/Config" component={Config} />
           <Route exact path="/Execution" component={Execution} />
           <Route exact path="/Login" component={Login} />
+          <Route exact path="/Account" component={Account} />
         </IonRouterOutlet>
       </IonPage>
     </IonReactRouter>

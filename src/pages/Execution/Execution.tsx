@@ -2,6 +2,7 @@ import { IonButton, IonContent, IonNav, IonNavLink, IonText, IonTitle, useIonRou
 import './Execution.css';
 import AppBar from '../../components/AppBar';
 import Login from '../Login/Login';
+import Account from '../Account/Account';
 import { useHistory } from 'react-router';
 
 const Execution: React.FC = () => {
@@ -16,7 +17,7 @@ const Execution: React.FC = () => {
           <IonButton
           onClick={(event) => {
             event.preventDefault();
-            ionRouter.push("Login", "forward", "push");
+            ionRouter.push("Account", "forward", "push");
           }}
           >Start</IonButton>
         {/* </IonNavLink> */}
