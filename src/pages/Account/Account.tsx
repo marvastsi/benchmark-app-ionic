@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonRow, IonList, IonItem, IonSelect, IonSelectOption } from '@ionic/react';
+import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonRow, IonList, IonItem, IonSelect, IonSelectOption, IonCheckbox, IonToggle } from '@ionic/react';
 import { Snackbar } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { LENGTH_LONG, sleep } from '../../commons/Constants';
@@ -130,10 +130,10 @@ const Account: React.FC = () => {
                 }}
               ></IonInput>
 
-              {/* Implementar uma lista/combobox/spinner ${countryCodeError} */}
+
               <IonList>
                 <IonItem>
-                  <IonSelect                    
+                  <IonSelect
                     aria-label="Phone-Country-Code"
                     interface="popover"
                     placeholder="Coutry Code"
@@ -160,6 +160,25 @@ const Account: React.FC = () => {
                   setPhoneNumberError(validateField("phoneNumber", phoneNumber))
                 }}
               ></IonInput>
+
+              <IonGrid>
+                <IonRow>
+                  <IonCol>
+                    <IonCheckbox
+                      labelPlacement="start"
+                      color="success"
+                      value={active}
+                    >Active</IonCheckbox>
+                  </IonCol>
+                  <IonCol>
+                    <IonToggle
+                      labelPlacement="end"
+                      color="success"
+                      checked={notification}
+                    >Notification</IonToggle>
+                  </IonCol>
+                </IonRow>
+              </IonGrid>
 
               <IonInput
                 className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}
