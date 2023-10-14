@@ -10,6 +10,7 @@ import Execution from '../Execution/Execution';
 import './Login.css';
 import FormButton from '../../components/FormButton';
 import { useHistory } from 'react-router';
+import { saveToken } from '../../commons/CredentialStorage';
 
 const Login: React.FC = () => {
   const history = useHistory();
@@ -49,21 +50,22 @@ const Login: React.FC = () => {
     setShowSnack(true);
     console.log(`User: ${username}, Pass: ${password}`);
 
-    // try {
-    //   const client = new HttpClient(baseUrl);
-    //   const token = await client.login({ username, password });
+    try {
+      const client = new HttpClient(baseUrl);
+      const token = await client.login({ username, password });
 
-    //   if (token) {
-    //     // saveToken(token);
-    //     console.log(`Token: ${token}`);
-    //     setSnackMessage(`${token}`);
-    //     setShowSnack(true);
-    //   }
-    // } catch (error) {
-    //   let err = error as HttpException;
-    //   setSnackMessage(`${err.status}: Login failed`);
-    //   setShowSnack(true);
-    // }
+      if (token) {
+        saveToken(token);
+        
+        console.log(`Token: ${token}`);
+        setSnackMessage(`${token}`);
+        setShowSnack(true);
+      }
+    } catch (error) {
+      let err = error as HttpException;
+      setSnackMessage(`${err.status}: Login failed`);
+      setShowSnack(true);
+    }
 
     await sleep(3000);
     history.goBack();
