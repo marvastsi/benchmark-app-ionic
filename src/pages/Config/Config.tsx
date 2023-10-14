@@ -2,14 +2,18 @@ import { IonCol, IonContent, IonGrid, IonInput, IonItem, IonList, IonNavLink, Io
 import { Snackbar } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import { saveConfig } from "../../commons/ConfigStorage";
 import { LENGTH_LONG } from '../../commons/Constants';
+import requestPermission from "../../commons/Permissions";
 import validateField from '../../commons/validator/Validator';
 import AppBar from '../../components/AppBar';
 import FormButton from '../../components/FormButton';
 import InputFile from '../../components/InputFile';
+import { Config } from '../../models/Config';
 import { File } from '../../models/File';
 import Execution from '../Execution/Execution';
 import './Config.css';
+
 
 const Config: React.FC = () => {
   const history = useHistory();
@@ -35,23 +39,51 @@ const Config: React.FC = () => {
     { label: "5 - Media Execution", value: 5 },
   ]);
 
+  useEffect(() => {
+
+    requestPermission()
+      .then(() => {
+        console.log(`Permissions Granted`);
+      })
+      .catch((error) => {
+        console.error(`Permissions error: ${JSON.stringify(error)}`);
+        setSnackMessage(`Permissions error: ${JSON.stringify(error)}`);
+        setShowSnack(true);
+      });
+
+  }, []);
+
   const handleSave = async () => {
     setSnackMessage(`Saved`);
     setShowSnack(true);
 
-    // try {
-    //   const config = await configStorage.save({ username, password });
+    try {
+      const config = {
+        testLoad: parseInt(testLoad),
+        mediaFile: { name: mediaFile.name, path: mediaFile.path },
+        uploadFile: {
+          uri: uploadFile.path,
+          name: uploadFile.name,
+          type: uploadFile.mimeType,
+        },
+        downloadFile,
+        serverUrl,
+        specificScenario: scenario,
+      } as Config;
 
-    //   if (config) {
-    //     // saveConfig(config);
-    //     setSnackMessage(`${token}`);
-    //     setShowSnack(true);
-    //   }
-    // } catch (error) {
-    //   let err = error as HttpException;
-    //   setSnackMessage(`${err.status}: Config failed`);
-    //   setShowSnack(true);
-    // }
+      await saveConfig(config);
+
+      const strConfig = `Config Saved: ${JSON.stringify(config)}`;
+      console.log(strConfig);
+
+      setSnackMessage(`${strConfig}`);
+      setShowSnack(true);
+    } catch (error) {
+      const strError = `Config Save error: ${JSON.stringify(error)}`;
+      console.error(strError);
+      setSnackMessage(`${strError}`);
+      setShowSnack(true);
+    }
 
     // await sleep();
     history.push('/Execution');
