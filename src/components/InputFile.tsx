@@ -35,24 +35,24 @@ const InputFile = (props: InputFileProps) => {
   }, [setFile]);
 
   return (
-    <>
-      <IonGrid className="ion-padding">
-        <IonRow className="ion-margin-top ion-padding-top ion-margin-bottom">
-          <IonCol size="12">
-            <IonGrid>
+      <IonGrid style={styles.fileInputView} >
+        <IonRow>
+          <IonCol size="12" style={styles.columnView}>
+            <IonGrid style={styles.fileInputView}>
               <IonRow>
-                <IonCol>
+                <IonCol size='10'  style={styles.fileInputView}>
                   <IonInput
                     {...props as HTMLAttributes<HTMLIonInputElement>}
+                    style={styles.textInput}
                     value={value}
                     autoCorrect="off"
                     type="url"
                     readonly={true}
                   ></IonInput>
                 </IonCol>
-                <IonCol>
+                <IonCol size='2' >
                   <IonButton
-                    color="success"
+                    style={styles.iconButton}
                     onClick={onSelectFile}
                   >
                     <IonIcon slot="icon-only" icon={folder}></IonIcon>
@@ -63,8 +63,28 @@ const InputFile = (props: InputFileProps) => {
           </IonCol>
         </IonRow>
       </IonGrid>
-    </>
   );
 }
 
 export default InputFile;
+
+const styles = {
+  fileInputView: {
+    margin: 0,
+    padding: 0,
+  },
+  columnView: {
+    marginLeft: 0,
+    padding: 0,
+    marginTop: 1,
+    marginBottom: 1,
+  },
+  textInput: {
+    height: 46,
+  },
+  iconButton: {
+    width: '100%',
+    backgroundColor: "teal",
+    borderRadius: 4,
+  },
+}

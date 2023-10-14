@@ -85,14 +85,8 @@ const Account: React.FC = () => {
     <>
       <AppBar title='Account' />
       <IonContent className="ion-padding">
-        <h1>Account Page</h1>
-        <IonGrid className="ion-padding">
-          <IonRow>
-            <IonCol size="12" className="heading-text">
-            </IonCol>
-          </IonRow>
-
-          <IonRow className="ion-margin-top ion-padding-top ion-margin-bottom">
+        <IonGrid>
+          <IonRow >
             <IonCol size="12">
 
               <IonInput
@@ -131,9 +125,10 @@ const Account: React.FC = () => {
               ></IonInput>
 
 
-              <IonList>
+              <IonList style={{ marginLeft: -15, paddingLeft: 0, }}>
                 <IonItem>
                   <IonSelect
+                    justify='space-between'
                     aria-label="Phone-Country-Code"
                     interface="popover"
                     placeholder="Coutry Code"

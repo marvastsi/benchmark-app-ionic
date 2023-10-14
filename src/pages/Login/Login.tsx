@@ -73,14 +73,8 @@ const Login: React.FC = () => {
     <>
       <AppBar title='Login' />
       <IonContent className="ion-padding">
-        <h1>Login Page</h1>
-        <IonGrid className="ion-padding">
+        <IonGrid>
           <IonRow>
-            <IonCol size="12" className="heading-text">
-            </IonCol>
-          </IonRow>
-
-          <IonRow className="ion-margin-top ion-padding-top ion-margin-bottom">
             <IonCol size="12">
 
               <IonInput
@@ -110,11 +104,11 @@ const Login: React.FC = () => {
               ></IonInput>
 
               {/* <IonNavLink routerDirection="back" component={() => <Execution />}> */}
-                <FormButton
-                  title="Login"
-                  onPress={handleLogin}
-                  disabled={!formValid}
-                />
+              <FormButton
+                title="Login"
+                onPress={handleLogin}
+                disabled={!formValid}
+              />
               {/* </IonNavLink> */}
             </IonCol>
           </IonRow>

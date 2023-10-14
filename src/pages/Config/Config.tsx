@@ -1,15 +1,15 @@
-import { IonCol, IonContent, IonGrid, IonInput, IonRow, IonList, IonItem, IonSelect, IonSelectOption, IonCheckbox, IonToggle, IonText, IonNavLink } from '@ionic/react';
-import AppBar from '../../components/AppBar';
-import Execution from '../Execution/Execution';
-import './Config.css';
+import { IonCol, IonContent, IonGrid, IonInput, IonItem, IonList, IonNavLink, IonRow, IonSelect, IonSelectOption } from '@ionic/react';
 import { Snackbar } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { LENGTH_LONG, sleep } from '../../commons/Constants';
-import validateField from '../../commons/validator/Validator';
-import FormButton from '../../components/FormButton';
 import { useHistory } from 'react-router';
-import { File } from '../../models/File';
+import { LENGTH_LONG } from '../../commons/Constants';
+import validateField from '../../commons/validator/Validator';
+import AppBar from '../../components/AppBar';
+import FormButton from '../../components/FormButton';
 import InputFile from '../../components/InputFile';
+import { File } from '../../models/File';
+import Execution from '../Execution/Execution';
+import './Config.css';
 
 const Config: React.FC = () => {
   const history = useHistory();
@@ -61,6 +61,8 @@ const Config: React.FC = () => {
   const [executionsError, setExecutionsError] = useState();
   const [donwaloadFileError, setDonwaloadFileError] = useState();
   const [serverUrlError, setServerUrlError] = useState();
+  const [mediaFileError, setMediaFileError] = useState();
+  const [uploadFileError, setUploadFileError] = useState();
 
   useEffect(() => {
     if (donwaloadFileError || executionsError || serverUrlError) {
@@ -75,12 +77,7 @@ const Config: React.FC = () => {
     <>
       <AppBar title='Config' />
       <IonContent className="ion-padding">
-        <h1>Config Page</h1>
-        <IonGrid className="ion-padding">
-          <IonRow>
-            <IonCol size="12" className="heading-text">
-            </IonCol>
-          </IonRow>
+        <IonGrid>
 
           <IonRow className="ion-margin-top ion-padding-top ion-margin-bottom">
             <IonCol size="12">
@@ -110,39 +107,42 @@ const Config: React.FC = () => {
                 fileTypes={['*/*']}
               ></InputFile>
               <IonInput
-                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}
+                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} 'ion-touched'`}
                 autoCorrect="off"
                 placeholder="Download file name"
                 type="text"
                 value={downloadFile}
                 onIonChange={(e) => setDownloadFile(e.detail.value?.trim() || '')}
+                errorText={executionsError}
                 onIonBlur={(event) => {
                   setDonwaloadFileError(validateField("downloadFile", downloadFile))
                 }}
               ></IonInput>
 
               <IonInput
-                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}
+                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'}  'ion-touched'`}
                 autoCorrect="off"
                 placeholder="Server url"
                 type="url"
                 value={serverUrl}
                 onIonChange={(e) => setServerUrl(e.detail.value!.trim())}
-                errorText={serverUrl}
+                errorText={serverUrlError}
                 onIonBlur={(event) => {
                   setServerUrlError(validateField("serverUrl", serverUrl))
                 }}
               ></IonInput>
 
-              <IonList>
+              <IonList style={{ marginLeft: -15, paddingLeft: 0, }}>
                 <IonItem>
                   <IonSelect
+                    justify="space-between"
                     aria-label="Specific-scenario"
                     interface="popover"
                     placeholder="Scenario"
                     value={scenario}
                     onIonChange={(e) => setScenario(e.detail.value!.trim())}
                   >
+                    <IonSelectOption value="0">Select scenario</IonSelectOption>
                     <IonSelectOption value="1">1 - Login API</IonSelectOption>
                     <IonSelectOption value="2">2 - Account Form</IonSelectOption>
                     <IonSelectOption value="3">3 - Download File</IonSelectOption>
@@ -152,10 +152,10 @@ const Config: React.FC = () => {
                 </IonItem>
               </IonList>
 
-              <IonText style={{ fontSize: 14 }}>
+              <p style={{ marginTop: 10, fontSize: 14 }}>
                 If a specific scenario was selected, then only this
                 scenario will be executed N times, where N = Executions
-              </IonText>
+              </p>
 
               <IonNavLink routerDirection="forward" component={() => <Execution />}>
                 <FormButton
