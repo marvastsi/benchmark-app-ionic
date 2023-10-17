@@ -1,8 +1,12 @@
 export interface File {
-    uri: string;
-    name?: string | null;
-    copyError?: string;
-    fileCopyUri?: string | null;
-    type?: string | null;
-    size?: number | null;
+    blob?: Blob;
+    data?: string;
+    duration?: number;
+    height?: number;
+    mimeType?: string;
+    modifiedAt?: number;
+    name?: string;
+    path?: string;
+    size?: number;
+    width?: number;
 }

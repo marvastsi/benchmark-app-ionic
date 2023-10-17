@@ -1,4 +1,4 @@
-import { IonButton, IonSpinner, IonText } from '@ionic/react';
+import { IonButton, IonSpinner } from '@ionic/react';
 import { useState } from 'react';
 
 type ButtonProps = {
@@ -11,7 +11,7 @@ const FormButton: React.FC<ButtonProps> = (props: ButtonProps) => {
     const { onPress, title, disabled } = props;
     const [loading, setLoading] = useState(false);
     return (
-        <>
+        <div style={{ marginTop: 50 }}>
             {(
                 <IonSpinner
                     style={(loading) ? styles.spinnerShow : styles.spinnerHide}>
@@ -27,13 +27,12 @@ const FormButton: React.FC<ButtonProps> = (props: ButtonProps) => {
                     setLoading(false);
                 }}
             >{title}</IonButton>
-        </>
+        </div>
     );
 }
 
 const styles = {
     button: {
-        marginTop: 50,
         marginLeft: 48,
         marginRight: 48,
         borderRadius: 4,
@@ -44,7 +43,6 @@ const styles = {
         opacity: 1,
     },
     buttonLoading: {
-        marginTop: 50,
         marginLeft: 48,
         marginRight: 48,
         borderRadius: 4,
@@ -64,28 +62,12 @@ const styles = {
     },
     spinnerShow: {
         zIndex: 1,
-        marginBottom: -85,
         display: "block",
         margin: "auto",
         color: "teal",
-        alignContent: "center",
-        alignItems: "center",
-
-    //     overflow: show;
-    // margin: auto;
-    // top: 0;
-    // left: 0;
-    // bottom: 0;
-    // right: 0;
     },
     spinnerHide: {
-        zIndex: -1,
-        marginBottom: -85,
-        display: "block",
-        margin: "auto",
-        color: "teal",
-        alignContent: "center",
-        alignItems: "center",
+        display: "none",
     },
 }
 
