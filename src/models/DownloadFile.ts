@@ -4,7 +4,7 @@ export class DownloadFile {
     file?: File;
 
     constructor(name: string, path: string) {
-        this.file = { name, uri: path };
+        this.file = { name, path };
     }
 
     public toString = (): string => {
