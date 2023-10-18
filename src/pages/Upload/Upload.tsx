@@ -10,10 +10,11 @@ import FormButton from "../../components/FormButton";
 import { HttpException } from "../../http/errors/HttpException";
 import HttpClient from "../../http/services/HttpClient";
 import Execution from "../Execution/Execution";
-import "./Download.css";
+import "./Upload.css";
 import { Snackbar } from "@mui/material";
+import { FileUpload } from "../../models/FileUpload";
 
-const Download = () => {
+const Upload = () => {
   const history = useHistory();
   const [showSnack, setShowSnack] = useState(false);
   const [snackMessage, setSnackMessage] = useState("");
@@ -23,6 +24,11 @@ const Download = () => {
   const [valuesFilled, setValuesFilled] = useState(false);
 
   const [fileName, setFileName] = useState("");
+  const [uploadFile, setUploadFile] = useState<FileUpload>({
+    name: "",
+    uri: null,
+    type: null,
+  });
 
   // useFocusEffect(useCallback(() => {
   //   setLoaded(false);
@@ -31,7 +37,7 @@ const Download = () => {
 
   // useEffect(() => {
   //   if (loaded) {
-  ////     setFileName("file.png");
+  ////     setFileName(uploadFile.name);
   //     setValuesFilled(true);
   //   }
   // }, [loaded])
@@ -39,19 +45,19 @@ const Download = () => {
   // useEffect(() => {
   //   if (valuesFilled) {
   //     setValuesFilled(false);
-  //     handleDownload();
+  //     handlUpload();
   //   }
   // }, [valuesFilled])
 
   const loadConfig = () => {
     retrieveConfig()
       .then((config) => {
-        setFileName(config.downloadFile);
+        setUploadFile(config.uploadFile);
         setBaseUrl(config.serverUrl);
         setLoaded(true);
       })
       .catch((error) => {
-        setSnackMessage(`Download loading error: ${error.message}`);
+        setSnackMessage(`Upload loading error: ${error.message}`);
         setShowSnack(true);
       });
   };
@@ -63,19 +69,19 @@ const Download = () => {
   //   return unsubscribe;
   // }, [navigation]);
 
-  const handleDownload = async () => {
+  const handleUpload = async () => {
     try {
       const client = new HttpClient(baseUrl);
-      const result = await client.download(fileName);
+      const result = await client.upload(uploadFile);
 
       if (result) {
         console.log(`${result}`);
-        setSnackMessage(`Download Executed: ${result.toString()}`);
+        setSnackMessage(`Upload Executed: ${result.toString()}`);
         setShowSnack(true);
       }
     } catch (error) {
       let err = error as HttpException;
-      setSnackMessage(`${err.status}: Download failed`);
+      setSnackMessage(`${err.status}: Upload failed`);
       setShowSnack(true);
     }
 
@@ -104,28 +110,28 @@ const Download = () => {
 
   return (
     <>
-      <AppBar title='Download' />
+      <AppBar title='Upload' />
       <IonContent className="ion-padding">
         <IonGrid>
           <IonRow className="ion-margin-top ion-padding-top ion-margin-bottom">
             <IonCol size="12">
               <IonInput
                 className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}
-                placeholder="Download file"
+                placeholder="File to upload"
                 autoCorrect="off"
-                type="text"
+                type="url"
                 value={fileName}
                 onIonChange={(e) => setFileName(e.detail.value!.trim())}
                 onBlur={(event) => {
-                  setFileNameError(validateField("downloadFile", fileName))
+                  setFileNameError(validateField("uploadFile", fileName))
                 }}
                 errorText={fileNameError}
               />
 
               {/* <IonNavLink routerDirection="back" component={() => <Execution />}> */}
                 <FormButton
-                  title="Download"
-                  onPress={handleDownload}
+                  title="Upload"
+                  onPress={handleUpload}
                   disabled={!formValid}
                 />
               {/* </IonNavLink> */}
@@ -142,4 +148,4 @@ const Download = () => {
   );
 };
 
-export default Download;
+export default Upload;

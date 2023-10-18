@@ -1,6 +1,6 @@
+import { Directory, Filesystem } from '@capacitor/filesystem';
 import axios, { AxiosError, AxiosInstance } from "axios";
 import { Buffer } from "buffer";
-import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Account, AccountCreated } from "../../models/Account";
 import { Credentials, Token } from "../../models/Credentials";
 import { DownloadFile } from "../../models/DownloadFile";
@@ -33,7 +33,7 @@ class HttpClient {
             );
             return (response.data as Token);
         } catch (error) {
-            throw this.handleException(error as Error, "Login Error: ${error}");
+            throw this.handleException(error as Error, `Login Error: ${error}`);
         }
     }
 
@@ -51,25 +51,25 @@ class HttpClient {
         }
     }
 
-    // public upload = async (inputFile: FileUpload | any): Promise<FileUploadResponse> => {
-    //     try {
-    //         var formData = new FormData();
-    //         formData.append("file", inputFile);
+    public upload = async (inputFile: FileUpload | any): Promise<FileUploadResponse> => {
+        try {
+            var formData = new FormData();
+            formData.append("file", inputFile);
 
-    //         const response = await this.api.post("/files/upload", formData,
-    //             {
-    //                 headers: {
-    //                     Accept: "application/json",
-    //                     "Content-Type": "multipart/form-data",
-    //                 },
-    //             },
-    //         );
+            const response = await this.api.post("/files/upload", formData,
+                {
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "multipart/form-data",
+                    },
+                },
+            );
 
-    //         return (response.data as FileUploadResponse);
-    //     } catch (error) {
-    //         throw this.handleException(error as Error, "Upload Error");
-    //     }
-    // }
+            return (response.data as FileUploadResponse);
+        } catch (error) {
+            throw this.handleException(error as Error, "Upload Error");
+        }
+    }
 
     public download = async (fileName: string): Promise<DownloadFile> => {
         try {
@@ -84,7 +84,7 @@ class HttpClient {
             );
 
             const data = Buffer.from(response.data, "binary").toString("base64");
-            
+
             const path = `Download/${fileName}`;
             await this.makeFile(path, data);
 
@@ -96,12 +96,12 @@ class HttpClient {
 
     private makeFile = async (filePath: string, data: string) => {
         try {
-            await Filesystem.writeFile({path: filePath, data, directory: Directory.ExternalStorage});
+            await Filesystem.writeFile({ path: filePath, data, directory: Directory.ExternalStorage });
         } catch (error) {
             console.log(error);
         }
     }
-    
+
     private handleException = (error: Error, message: string): HttpException => {
         let exeption;
         if (error instanceof AxiosError) {
