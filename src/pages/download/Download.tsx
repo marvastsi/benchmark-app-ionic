@@ -39,22 +39,22 @@ const Download = () => {
   // useEffect(() => {
   //   if (valuesFilled) {
   //     setValuesFilled(false);
-  //     handlDownload();
+  //     handleDownload();
   //   }
   // }, [valuesFilled])
 
-  // const loadConfig = () => {
-  //   retrieveConfig()
-  //     .then((config) => {
-  //       setFileName(config.downloadFile);
-  //       setBaseUrl(config.serverUrl);
-  //       setLoaded(true);
-  //     })
-  //     .catch((error) => {
-  //       setSnackMessage(`Download loading error: ${error.message}`);
-  //       setShowSnack(true);
-  //     });
-  // };
+  const loadConfig = () => {
+    retrieveConfig()
+      .then((config) => {
+        setFileName(config.downloadFile);
+        setBaseUrl(config.serverUrl);
+        setLoaded(true);
+      })
+      .catch((error) => {
+        setSnackMessage(`Download loading error: ${error.message}`);
+        setShowSnack(true);
+      });
+  };
 
   // useeffect(() => {
   //   const unsubscribe = navigation.addlistener('focus', () => {
@@ -63,7 +63,7 @@ const Download = () => {
   //   return unsubscribe;
   // }, [navigation]);
 
-  const handlDownload = async () => {
+  const handleDownload = async () => {
     try {
       const client = new HttpClient(baseUrl);
       const result = await client.download(fileName);
@@ -104,14 +104,14 @@ const Download = () => {
 
   return (
     <>
-      <AppBar title='Config' />
+      <AppBar title='Download' />
       <IonContent className="ion-padding">
         <IonGrid>
           <IonRow className="ion-margin-top ion-padding-top ion-margin-bottom">
             <IonCol size="12">
               <IonInput
                 className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}
-                placeholder="download file"
+                placeholder="Download file"
                 autoCorrect="off"
                 type="text"
                 value={fileName}
@@ -125,7 +125,7 @@ const Download = () => {
               {/* <IonNavLink routerDirection="back" component={() => <Execution />}> */}
                 <FormButton
                   title="Download"
-                  onPress={handlDownload}
+                  onPress={handleDownload}
                   disabled={!formValid}
                 />
               {/* </IonNavLink> */}
