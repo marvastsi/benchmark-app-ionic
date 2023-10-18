@@ -15,7 +15,7 @@ const Account: React.FC = () => {
   const history = useHistory();
   const [showSnack, setShowSnack] = useState(false);
   const [snackMessage, setSnackMessage] = useState("");
-  const [baseUrl, setBaseUrl] = useState("http://192.168.100.115:3000/api");
+  const [baseUrl, setBaseUrl] = useState("http://192.168.100.129:3000/api");
   const [loaded, setLoaded] = useState(false);
   const [valuesFilled, setValuesFilled] = useState(false);
 

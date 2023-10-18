@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
 import { Buffer } from "buffer";
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Account, AccountCreated } from "../../models/Account";
 import { Credentials, Token } from "../../models/Credentials";
 import { DownloadFile } from "../../models/DownloadFile";
@@ -71,36 +71,36 @@ class HttpClient {
     //     }
     // }
 
-    // public download = async (fileName: string): Promise<DownloadFile> => {
-    //     try {
-    //         const response = await this.api.get(
-    //             `/files/download/${fileName}`,
-    //             {
-    //                 headers: {
-    //                     Accept: "*/*",
-    //                 },
-    //                 responseType: 'arraybuffer',
-    //             },
-    //         );
+    public download = async (fileName: string): Promise<DownloadFile> => {
+        try {
+            const response = await this.api.get(
+                `/files/download/${fileName}`,
+                {
+                    headers: {
+                        Accept: "*/*",
+                    },
+                    responseType: 'arraybuffer',
+                },
+            );
 
-    //         const path = `${Filesystem.DownloadDirectoryPath}/${fileName}`;
-    //         const data = Buffer.from(response.data, "binary").toString("base64");
+            const data = Buffer.from(response.data, "binary").toString("base64");
+            
+            const path = `Download/${fileName}`;
+            await this.makeFile(path, data);
 
-    //         await this.makeFile(path, data);
+            return new DownloadFile(fileName, path);
+        } catch (error) {
+            throw this.handleException(error as Error, "Download Error");
+        }
+    }
 
-    //         return new DownloadFile(fileName, path);
-    //     } catch (error) {
-    //         thow this.handleException(error as Error, "Download Error");
-    //     }
-    // }
-
-    // private makeFile = async (filePath: string, data: string) => {
-    //     try {
-    //         await Filesystem.writeFile(filePath, data, "base64");
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+    private makeFile = async (filePath: string, data: string) => {
+        try {
+            await Filesystem.writeFile({path: filePath, data, directory: Directory.ExternalStorage});
+        } catch (error) {
+            console.log(error);
+        }
+    }
     
     private handleException = (error: Error, message: string): HttpException => {
         let exeption;
