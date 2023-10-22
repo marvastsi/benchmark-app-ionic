@@ -1,11 +1,13 @@
 import { IonNav, IonNavLink, IonPage, IonRouterOutlet } from '@ionic/react';
 import React from 'react';
-import Config from './pages/Config/Config';
+import ConfigPAge from './pages/Config/ConfigPage';
 import { Redirect, Route } from 'react-router';
-import Login from './pages/Login/Login';
+import LoginPage from './pages/Login/LoginPage';
 import Execution from './pages/Execution/Execution';
 import { IonReactRouter } from '@ionic/react-router';
-import Account from './pages/Account/Account';
+import AccountPage from './pages/Account/AccountPage';
+import UploadPage from './pages/Upload/UploadPage';
+import DownloadPage from './pages/Download/DownloadPage';
 
 const Main: React.FC = () => (
   <>
@@ -14,10 +16,12 @@ const Main: React.FC = () => (
       <IonPage>
         <IonRouterOutlet>
           <Route exact path="/" render={() => <Redirect to="/Config" />} />
-          <Route exact path="/Config" component={Config} />
+          <Route exact path="/Config" component={ConfigPAge} />
           <Route exact path="/Execution" component={Execution} />
-          <Route exact path="/Login" component={Login} />
-          <Route exact path="/Account" component={Account} />
+          <Route exact path="/Login" component={LoginPage} />
+          <Route exact path="/Account" component={AccountPage} />
+          <Route exact path="/Upload" component={UploadPage} />
+          <Route exact path="/Download" component={DownloadPage} />
         </IonRouterOutlet>
       </IonPage>
     </IonReactRouter>
