@@ -53,8 +53,10 @@ class HttpClient {
 
     public upload = async (inputFile: FileUpload | any): Promise<FileUploadResponse> => {
         try {
-            var formData = new FormData();
-            formData.append("file", inputFile);
+            const fetchResp = await fetch(inputFile.path);
+            const blob = await fetchResp.blob();
+            const formData = new FormData();
+            formData.append("file", blob, inputFile.name);
 
             const response = await this.api.post("/files/upload", formData,
                 {
@@ -73,6 +75,7 @@ class HttpClient {
 
     public download = async (fileName: string): Promise<DownloadFile> => {
         try {
+            console.log(`fileName: ${fileName}`)
             const response = await this.api.get(
                 `/files/download/${fileName}`,
                 {
@@ -86,17 +89,17 @@ class HttpClient {
             const data = Buffer.from(response.data, "binary").toString("base64");
 
             const path = `Download/${fileName}`;
-            await this.makeFile(path, data);
+            const result = await this.makeFile(path, data);
 
-            return new DownloadFile(fileName, path);
+            return new DownloadFile(fileName, `${result?.uri || path}`);
         } catch (error) {
-            throw this.handleException(error as Error, "Download Error");
+            throw this.handleException(error as Error, `Download Error ${fileName}`);
         }
     }
 
     private makeFile = async (filePath: string, data: string) => {
         try {
-            await Filesystem.writeFile({ path: filePath, data, directory: Directory.ExternalStorage });
+            return await Filesystem.writeFile({ path: filePath, data, directory: Directory.ExternalStorage });
         } catch (error) {
             console.log(error);
         }

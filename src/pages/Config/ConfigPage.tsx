@@ -3,7 +3,7 @@ import { Snackbar } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { saveConfig } from "../../commons/ConfigStorage";
-import { LENGTH_LONG } from '../../commons/Constants';
+import { LENGTH_LONG, sleep } from '../../commons/Constants';
 import requestPermission from "../../commons/Permissions";
 import validateField from '../../commons/validator/Validator';
 import AppBar from '../../components/AppBar';
@@ -12,15 +12,19 @@ import InputFile from '../../components/InputFile';
 import { Config } from '../../models/Config';
 import { File } from '../../models/File';
 import Execution from '../Execution/Execution';
-import './Config.css';
+import './ConfigPage.css';
 
 
-const Config: React.FC = () => {
+const ConfigPage = () => {
   const history = useHistory();
   const [showSnack, setShowSnack] = useState(false);
   const [snackMessage, setSnackMessage] = useState("");
 
-  const [isTouched, setIsTouched] = useState(false);
+  const [isTouchedExecutions, setIsTouchedExecutions] = useState(false);
+  const [isTouchedDownload, setIsTouchedDownload] = useState(false);
+  const [isTouchedServer, setIsTouchedServer] = useState(false);
+  // const [isTouched, setIsTouched] = useState(false);
+  // const [isTouched, setIsTouched] = useState(false);
   const [formValid, setFormValid] = useState<Boolean>(true);
 
   const [testLoad, setTestLoad] = useState("");
@@ -29,15 +33,6 @@ const Config: React.FC = () => {
   const [downloadFile, setDownloadFile] = useState("");
   const [serverUrl, setServerUrl] = useState("");
   const [scenario, setScenario] = useState(0);
-
-  const [items, setItems] = useState([
-    { label: "Select scenario", value: 0 },
-    { label: "1 - Login API", value: 1 },
-    { label: "2 - Account Form", value: 2 },
-    { label: "3 - Download File", value: 3 },
-    { label: "4 - Upload File", value: 4 },
-    { label: "5 - Media Execution", value: 5 },
-  ]);
 
   useEffect(() => {
 
@@ -85,7 +80,7 @@ const Config: React.FC = () => {
       setShowSnack(true);
     }
 
-    // await sleep();
+    await sleep();
     history.push('/Execution');
   };
 
@@ -115,14 +110,16 @@ const Config: React.FC = () => {
             <IonCol size="12">
 
               <IonInput
-                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}
+                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouchedExecutions && 'ion-touched'}`}
                 autoCorrect="off"
                 placeholder="Executions"
                 type="number"
                 value={testLoad}
-                onIonChange={(e) => setTestLoad(e.detail.value!.trim())}
                 errorText={executionsError}
+                onIonChange={(e) => setTestLoad(e.detail.value!.trim())}
+                onIonInput={(e) => setTestLoad(e.detail.value!.trim())}
                 onIonBlur={(event) => {
+                  setIsTouchedExecutions(true);
                   setExecutionsError(validateField("executions", testLoad))
                 }}
               ></IonInput>
@@ -139,27 +136,31 @@ const Config: React.FC = () => {
                 fileTypes={['*/*']}
               ></InputFile>
               <IonInput
-                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} 'ion-touched'`}
+                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouchedDownload && 'ion-touched'}`}
                 autoCorrect="off"
                 placeholder="Download file name"
                 type="text"
                 value={downloadFile}
-                onIonChange={(e) => setDownloadFile(e.detail.value?.trim() || '')}
                 errorText={executionsError}
+                onIonChange={(e) => setDownloadFile(e.detail.value?.trim() || '')}
+                onIonInput={(e) => setDownloadFile(e.detail.value!.trim() || '')}
                 onIonBlur={(event) => {
+                  setIsTouchedDownload(true);
                   setDonwaloadFileError(validateField("downloadFile", downloadFile))
                 }}
               ></IonInput>
 
               <IonInput
-                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'}  'ion-touched'`}
+                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'}  ${isTouchedServer && 'ion-touched'}`}
                 autoCorrect="off"
                 placeholder="Server url"
                 type="url"
                 value={serverUrl}
-                onIonChange={(e) => setServerUrl(e.detail.value!.trim())}
                 errorText={serverUrlError}
+                onIonChange={(e) => setServerUrl(e.detail.value!.trim())}
+                onIonInput={(e) => setServerUrl(e.detail.value!.trim())}
                 onIonBlur={(event) => {
+                  setIsTouchedServer(true);
                   setServerUrlError(validateField("serverUrl", serverUrl))
                 }}
               ></IonInput>
@@ -189,24 +190,24 @@ const Config: React.FC = () => {
                 scenario will be executed N times, where N = Executions
               </p>
 
-              <IonNavLink routerDirection="forward" component={() => <Execution />}>
-                <FormButton
-                  title="Save Config"
-                  onPress={handleSave}
-                  disabled={!formValid}
-                />
-              </IonNavLink>
+              {/* <IonNavLink routerDirection="forward" component={() => <Execution />}> */}
+              <FormButton
+                title="Save Config"
+                onPress={handleSave}
+                disabled={!formValid}
+              />
+              {/* </IonNavLink> */}
             </IonCol>
           </IonRow>
         </IonGrid>
       </IonContent>
       <Snackbar
         open={showSnack}
-        autoHideDuration={LENGTH_LONG}
+        autoHideDuration={10000}
         message={snackMessage}
       />
     </>
   );
 };
 
-export default Config;
+export default ConfigPage;

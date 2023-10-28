@@ -7,16 +7,16 @@ import AppBar from '../../components/AppBar';
 import { HttpException } from '../../http/errors/HttpException';
 import HttpClient from '../../http/services/HttpClient';
 import Execution from '../Execution/Execution';
-import './Login.css';
+import './LoginPage.css';
 import FormButton from '../../components/FormButton';
 import { useHistory } from 'react-router';
 import { saveToken } from '../../commons/CredentialStorage';
 
-const Login: React.FC = () => {
+const LoginPage = () => {
   const history = useHistory();
   const [showSnack, setShowSnack] = useState(false);
   const [snackMessage, setSnackMessage] = useState("");
-  const [baseUrl, setBaseUrl] = useState("http://192.168.100.115:3000/api");
+  const [baseUrl, setBaseUrl] = useState("http://192.168.100.129:3000/api");
   const [loaded, setLoaded] = useState(false);
   const [valuesFilled, setValuesFilled] = useState(false);
 
@@ -28,15 +28,11 @@ const Login: React.FC = () => {
   const [usernameError, setUsernameError] = useState();
   const [passwordError, setPasswordError] = useState();
 
-  const [isTouched, setIsTouched] = useState(false);
+  const [isTouchedPass, setIsTouchedPass] = useState(false);
+  const [isTouchedUsername, setIsTouchedUsername] = useState(false);
   const [formValid, setFormValid] = useState<Boolean>();
 
-  const markTouched = () => {
-    setIsTouched(true);
-  };
-
   useEffect(() => {
-    markTouched();
     if (usernameError || passwordError) {
       setFormValid(false);
     } else {
@@ -56,9 +52,8 @@ const Login: React.FC = () => {
 
       if (token) {
         saveToken(token);
-        
-        console.log(`Token: ${token}`);
-        setSnackMessage(`${token}`);
+
+        setSnackMessage(`${token.value}`);
         setShowSnack(true);
       }
     } catch (error) {
@@ -80,27 +75,31 @@ const Login: React.FC = () => {
             <IonCol size="12">
 
               <IonInput
-                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}
+                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouchedUsername && 'ion-touched'}`}
                 autoCorrect="off"
                 placeholder="Username"
                 type="text"
                 value={username}
-                onIonChange={(e) => setUsername(e.detail.value!.trim())}
                 errorText={usernameError}
+                onIonChange={(e) => setUsername(e.detail.value!.trim())}
+                onIonInput={(e) => setUsername(e.detail.value!.trim())}
                 onIonBlur={(event) => {
+                  setIsTouchedUsername(true);
                   setUsernameError(validateField("loginUsername", username))
                 }}
               ></IonInput>
 
               <IonInput
-                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}
+                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouchedPass && 'ion-touched'}`}
                 autoCorrect="off"
                 placeholder="Password"
                 type="password"
                 value={password}
-                onIonChange={(e) => setPassword(e.detail.value!.trim())}
                 errorText={passwordError}
+                onIonChange={(e) => setPassword(e.detail.value!.trim())}
+                onIonInput={(e) => setPassword(e.detail.value!.trim())}
                 onIonBlur={(event) => {
+                  setIsTouchedPass(true);
                   setPasswordError(validateField("loginPassword", password))
                 }}
               ></IonInput>
@@ -126,4 +125,4 @@ const Login: React.FC = () => {
 };
 
 
-export default Login;
+export default LoginPage;

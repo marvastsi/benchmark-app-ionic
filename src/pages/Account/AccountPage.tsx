@@ -7,11 +7,11 @@ import AppBar from '../../components/AppBar';
 import { HttpException } from '../../http/errors/HttpException';
 import HttpClient from '../../http/services/HttpClient';
 import Execution from '../Execution/Execution';
-import './Account.css';
+import './AccountPage.css';
 import FormButton from '../../components/FormButton';
 import { useHistory } from 'react-router';
 
-const Account: React.FC = () => {
+const AccountPage = () => {
   const history = useHistory();
   const [showSnack, setShowSnack] = useState(false);
   const [snackMessage, setSnackMessage] = useState("");
@@ -34,25 +34,26 @@ const Account: React.FC = () => {
   const [firstNameError, setFirstNameError] = useState();
   const [emailError, setEmailError] = useState();
   const [phoneNumberError, setPhoneNumberError] = useState();
-  const [countryCodeError, setCountryCodeError] = useState();
+  // const [countryCodeError, setCountryCodeError] = useState();
   const [usernameError, setUsernameError] = useState();
   const [passwordError, setPasswordError] = useState();
 
-  const [isTouched, setIsTouched] = useState(false);
+  const [isTouchedFirstName, setIsTouchedFirstName] = useState(false);
+  const [isTouchedLastName, setIsTouchedLastName] = useState(false);
+  const [isTouchedEmail, setIsTouchedEmail] = useState(false);
+  const [isTouchedPhone, setIsTouchedPhone] = useState(false);
+  const [isTouchedUsername, setIsTouchedUsername] = useState(false);
+  const [isTouchedPass, setIsTouchedPass] = useState(false);
+
   const [formValid, setFormValid] = useState<Boolean>();
 
-  const markTouched = () => {
-    setIsTouched(true);
-  };
-
   useEffect(() => {
-    markTouched();
-    if (usernameError || passwordError) {
+    if (usernameError || passwordError || emailError || phoneNumberError || firstNameError) {
       setFormValid(false);
     } else {
       setFormValid(true);
     }
-  }, [usernameError, passwordError]);
+  }, [usernameError, passwordError, emailError, phoneNumberError, firstNameError]);
   /////// END validations
 
   const handleAccount = async () => {
@@ -67,8 +68,7 @@ const Account: React.FC = () => {
       });
 
       if (AccountCreated) {
-        console.log(`${AccountCreated}`);
-        setSnackMessage(`${AccountCreated}`);
+        setSnackMessage(`${JSON.stringify(AccountCreated)}`);
         setShowSnack(true);
       }
     } catch (error) {
@@ -77,7 +77,7 @@ const Account: React.FC = () => {
       setShowSnack(true);
     }
 
-    await sleep(3000);
+    await sleep();
     history.goBack();
   };
 
@@ -90,36 +90,43 @@ const Account: React.FC = () => {
             <IonCol size="12">
 
               <IonInput
-                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}
+                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouchedFirstName && 'ion-touched'}`}
                 autoCorrect="off"
                 placeholder="First name"
                 type="text"
                 value={firstName}
-                onIonChange={(e) => setFirstName(e.detail.value!.trim())}
                 errorText={firstNameError}
+                onIonChange={(e) => setFirstName(e.detail.value!.trim())}
+                onIonInput={(e) => setFirstName(e.detail.value!.trim())}
                 onIonBlur={(event) => {
+                  setIsTouchedFirstName(true);
                   setFirstNameError(validateField("firstName", firstName))
                 }}
               ></IonInput>
 
               <IonInput
-                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}
+                className={`${formValid && 'ion-valid'} ${isTouchedLastName && 'ion-touched'}`}
                 autoCorrect="off"
                 placeholder="Last name"
                 type="text"
                 value={lastName}
                 onIonChange={(e) => setLastName(e.detail.value?.trim() || '')}
+                onIonBlur={(e) => {
+                  setIsTouchedLastName(true)
+                }}
               ></IonInput>
 
               <IonInput
-                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}
+                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouchedEmail && 'ion-touched'}`}
                 autoCorrect="off"
                 placeholder="Email"
                 type="email"
                 value={email}
+                errorText={emailError}
                 onIonChange={(e) => setEmail(e.detail.value!.trim())}
-                errorText={email}
+                onIonInput={(e) => setEmail(e.detail.value!.trim())}
                 onIonBlur={(event) => {
+                  setIsTouchedEmail(true);
                   setEmailError(validateField("email", email))
                 }}
               ></IonInput>
@@ -134,8 +141,6 @@ const Account: React.FC = () => {
                     placeholder="Coutry Code"
                     value={countryCode}
                     onIonChange={(e) => setCountryCode(e.detail.value!.trim())}
-                    onIonCancel={() => setCountryCodeError(validateField("countryCode", countryCode))}
-                    onIonDismiss={() => setCountryCodeError(validateField("countryCode", countryCode))}
                   >
                     <IonSelectOption value="+55">+55 BRA</IonSelectOption>
                     <IonSelectOption value="+1">+1 USA</IonSelectOption>
@@ -144,14 +149,16 @@ const Account: React.FC = () => {
               </IonList>
 
               <IonInput
-                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}
+                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouchedPhone && 'ion-touched'}`}
                 autoCorrect="off"
                 placeholder="Phone Number"
                 type="number"
                 value={phoneNumber}
-                onIonChange={(e) => setPhoneNumber(e.detail.value!.trim())}
                 errorText={phoneNumberError}
+                onIonChange={(e) => setPhoneNumber(e.detail.value!.trim())}
+                onIonInput={(e) => setPhoneNumber(e.detail.value!.trim())}
                 onIonBlur={(event) => {
+                  setIsTouchedPhone(true);
                   setPhoneNumberError(validateField("phoneNumber", phoneNumber))
                 }}
               ></IonInput>
@@ -162,6 +169,7 @@ const Account: React.FC = () => {
                     <IonCheckbox
                       labelPlacement="start"
                       color="success"
+                      onIonChange={(e) => setActive(e.detail.checked)}
                       value={active}
                     >Active</IonCheckbox>
                   </IonCol>
@@ -169,6 +177,7 @@ const Account: React.FC = () => {
                     <IonToggle
                       labelPlacement="end"
                       color="success"
+                      onIonChange={(e) => setNotification(e.detail.checked)}
                       checked={notification}
                     >Notification</IonToggle>
                   </IonCol>
@@ -176,27 +185,31 @@ const Account: React.FC = () => {
               </IonGrid>
 
               <IonInput
-                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}
+                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouchedUsername && 'ion-touched'}`}
                 autoCorrect="off"
                 placeholder="Username"
                 type="text"
                 value={username}
-                onIonChange={(e) => setUsername(e.detail.value!.trim())}
                 errorText={usernameError}
+                onIonChange={(e) => setUsername(e.detail.value!.trim())}
+                onIonInput={(e) => setUsername(e.detail.value!.trim())}
                 onIonBlur={(event) => {
+                  setIsTouchedUsername(true);
                   setUsernameError(validateField("username", username))
                 }}
               ></IonInput>
 
               <IonInput
-                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}
+                className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouchedPass && 'ion-touched'}`}
                 autoCorrect="off"
                 placeholder="Password"
                 type="password"
                 value={password}
-                onIonChange={(e) => setPassword(e.detail.value!.trim())}
                 errorText={passwordError}
+                onIonChange={(e) => setPassword(e.detail.value!.trim())}
+                onIonInput={(e) => setPassword(e.detail.value!.trim())}
                 onIonBlur={(event) => {
+                  setIsTouchedPass(true);
                   setPasswordError(validateField("password", password))
                 }}
               ></IonInput>
@@ -222,4 +235,4 @@ const Account: React.FC = () => {
 };
 
 
-export default Account;
+export default AccountPage;
