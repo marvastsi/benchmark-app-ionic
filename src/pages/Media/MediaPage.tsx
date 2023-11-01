@@ -18,6 +18,7 @@ const MediaPage = () => {
       <AppBar title='Media' />
       <IonContent className="ion-padding">
         <IonText>Media Player</IonText>
+        
       </IonContent>
       <Snackbar
         open={showSnack}

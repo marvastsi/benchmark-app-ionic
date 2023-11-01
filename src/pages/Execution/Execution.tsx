@@ -55,6 +55,14 @@ const Execution = () => {
             }}
           >Media</IonButton>
         </IonItem>
+        <IonItem>
+        <IonButton
+            onClick={(event) => {
+              event.preventDefault();
+              ionRouter.push("MediaPlayer", "forward", "push");
+            }}
+          >Media Player</IonButton>
+        </IonItem>
       </IonContent>
     </>
   );

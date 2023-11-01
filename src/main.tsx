@@ -8,6 +8,8 @@ import { IonReactRouter } from '@ionic/react-router';
 import AccountPage from './pages/Account/AccountPage';
 import UploadPage from './pages/Upload/UploadPage';
 import DownloadPage from './pages/Download/DownloadPage';
+import MediaPage from './pages/Media/MediaPage';
+import MediaPlayer from './pages/Media/MediaPlayer';
 
 const Main: React.FC = () => (
   <>
@@ -22,6 +24,8 @@ const Main: React.FC = () => (
           <Route exact path="/Account" component={AccountPage} />
           <Route exact path="/Upload" component={UploadPage} />
           <Route exact path="/Download" component={DownloadPage} />
+          <Route exact path="/Media" component={MediaPage} />
+          <Route exact path="/MediaPlayer" component={MediaPlayer} />
         </IonRouterOutlet>
       </IonPage>
     </IonReactRouter>
