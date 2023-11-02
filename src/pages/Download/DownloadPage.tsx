@@ -1,8 +1,7 @@
-import { IonCol, IonContent, IonGrid, IonInput, IonRow } from "@ionic/react";
-// import { useFocusEffect } from "@react-navigation/native";
+import { IonCol, IonContent, IonGrid, IonInput, IonRow, useIonViewWillEnter, withIonLifeCycle } from "@ionic/react";
 import { Snackbar } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+import { useCallback, useEffect, useState } from "react";
+import { RouteComponentProps, useHistory } from "react-router";
 import { retrieveConfig } from "../../commons/ConfigStorage";
 import { LENGTH_LONG, sleep } from "../../commons/Constants";
 import validateField from "../../commons/validator/Validator";
@@ -12,8 +11,7 @@ import { HttpException } from "../../http/errors/HttpException";
 import HttpClient from "../../http/services/HttpClient";
 import "./DownloadPage.css";
 
-const DownloadPage = () => {
-  const history = useHistory();
+const DownloadPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
   const [showSnack, setShowSnack] = useState(false);
   const [snackMessage, setSnackMessage] = useState("");
 
@@ -23,24 +21,24 @@ const DownloadPage = () => {
 
   const [fileName, setFileName] = useState("");
 
-  // useFocusEffect(useCallback(() => {
-  //   setLoaded(false);
-  //   loadConfig();
-  // }, []));
+  useEffect(() => {
+    setLoaded(false);
+    loadConfig();
+  }, [history]);
 
-  // useEffect(() => {
-  //   if (loaded) {
-  ////     setFileName("file.png");
-  //     setValuesFilled(true);
-  //   }
-  // }, [loaded])
+  useEffect(() => {
+    if (loaded) {
+  //     setFileName("file.png");
+      setValuesFilled(true);
+    }
+  }, [loaded])
 
-  // useEffect(() => {
-  //   if (valuesFilled) {
-  //     setValuesFilled(false);
-  //     handleDownload();
-  //   }
-  // }, [valuesFilled])
+  useEffect(() => {
+    if (valuesFilled) {
+      setValuesFilled(false);
+      handleDownload();
+    }
+  }, [valuesFilled])
 
   const loadConfig = () => {
     retrieveConfig()
@@ -55,6 +53,7 @@ const DownloadPage = () => {
       });
   };
 
+  // What is navigation here????????
   // useeffect(() => {
   //   const unsubscribe = navigation.addlistener('focus', () => {
   //     console.log('in navigation add listener block');
@@ -143,4 +142,4 @@ const DownloadPage = () => {
   );
 };
 
-export default DownloadPage;
+export default withIonLifeCycle(DownloadPage);

@@ -1,5 +1,4 @@
 import { IonCol, IonContent, IonGrid, IonInput, IonItem, IonRow } from "@ionic/react";
-// import { useFocusEffect } from "@react-navigation/native";
 import { Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
@@ -8,12 +7,12 @@ import { LENGTH_LONG, sleep } from "../../commons/Constants";
 import validateField from "../../commons/validator/Validator";
 import AppBar from "../../components/AppBar";
 import FormButton from "../../components/FormButton";
+import InputFile from "../../components/InputFile";
 import { HttpException } from "../../http/errors/HttpException";
 import HttpClient from "../../http/services/HttpClient";
+import { File } from "../../models/File";
 import { FileUpload } from "../../models/FileUpload";
 import "./UploadPage.css";
-import InputFile from "../../components/InputFile";
-import { File } from "../../models/File";
 
 const UploadPage = () => {
   const history = useHistory();
@@ -30,7 +29,6 @@ const UploadPage = () => {
     uri: null,
     type: null,
   });
-
 
   const setUpload = (file: File) => {
     setUploadFile({
@@ -87,7 +85,7 @@ const UploadPage = () => {
 
       setSnackMessage(`${JSON.stringify(uploadFile)}`);
       setShowSnack(true);
-await sleep(LENGTH_LONG);
+      await sleep(LENGTH_LONG);
 
       const result = await client.upload(uploadFile);
 

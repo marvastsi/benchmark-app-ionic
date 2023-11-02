@@ -1,15 +1,14 @@
-import { IonNav, IonNavLink, IonPage, IonRouterOutlet } from '@ionic/react';
-import React from 'react';
-import ConfigPAge from './pages/Config/ConfigPage';
-import { Redirect, Route } from 'react-router';
-import LoginPage from './pages/Login/LoginPage';
-import Execution from './pages/Execution/Execution';
+import { IonNav, IonPage, IonRouterOutlet, withIonLifeCycle } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import React from 'react';
+import { Redirect, Route } from 'react-router';
 import AccountPage from './pages/Account/AccountPage';
-import UploadPage from './pages/Upload/UploadPage';
+import ConfigPAge from './pages/Config/ConfigPage';
 import DownloadPage from './pages/Download/DownloadPage';
+import Execution from './pages/Execution/Execution';
+import LoginPage from './pages/Login/LoginPage';
 import MediaPage from './pages/Media/MediaPage';
-import MediaPlayer from './pages/Media/MediaPlayer';
+import UploadPage from './pages/Upload/UploadPage';
 
 const Main: React.FC = () => (
   <>
@@ -25,11 +24,10 @@ const Main: React.FC = () => (
           <Route exact path="/Upload" component={UploadPage} />
           <Route exact path="/Download" component={DownloadPage} />
           <Route exact path="/Media" component={MediaPage} />
-          <Route exact path="/MediaPlayer" component={MediaPlayer} />
         </IonRouterOutlet>
       </IonPage>
     </IonReactRouter>
   </>
 );
 
-export default Main;
+export default withIonLifeCycle(Main);
