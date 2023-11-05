@@ -1,10 +1,9 @@
 import { IonCol, IonContent, IonGrid, IonInput, IonItem, IonRow } from "@ionic/react";
-// import { useFocusEffect } from "@react-navigation/native";
 import { Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+import { RouteComponentProps } from "react-router";
 import { retrieveConfig } from "../../commons/ConfigStorage";
-import { LENGTH_LONG, sleep } from "../../commons/Constants";
+import { sleep } from "../../commons/Constants";
 import validateField from "../../commons/validator/Validator";
 import AppBar from "../../components/AppBar";
 import FormButton from "../../components/FormButton";
@@ -12,15 +11,12 @@ import { HttpException } from "../../http/errors/HttpException";
 import HttpClient from "../../http/services/HttpClient";
 import { FileUpload } from "../../models/FileUpload";
 import "./UploadPage.css";
-import InputFile from "../../components/InputFile";
-import { File } from "../../models/File";
 
-const UploadPage = () => {
-  const history = useHistory();
+const UploadPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
   const [showSnack, setShowSnack] = useState(false);
   const [snackMessage, setSnackMessage] = useState("");
 
-  const [baseUrl, setBaseUrl] = useState("http://192.168.100.129:3000/api");
+  const [baseUrl, setBaseUrl] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [valuesFilled, setValuesFilled] = useState(false);
 
@@ -31,35 +27,24 @@ const UploadPage = () => {
     type: null,
   });
 
+  useEffect(() => {
+    setLoaded(false);
+    loadConfig();
+  }, [history]);
 
-  const setUpload = (file: File) => {
-    setUploadFile({
-      uri: file.path,
-      name: file.name,
-      type: file.mimeType,
-    });
-    setFileName(file.name || ' ');
-  }
+  useEffect(() => {
+    if (loaded) {
+      setFileName(uploadFile.name || "");
+      setValuesFilled(true);
+    }
+  }, [loaded])
 
-
-  // useFocusEffect(useCallback(() => {
-  //   setLoaded(false);
-  //   loadConfig();
-  // }, []));
-
-  // useEffect(() => {
-  //   if (loaded) {
-  ////     setFileName(uploadFile.name);
-  //     setValuesFilled(true);
-  //   }
-  // }, [loaded])
-
-  // useEffect(() => {
-  //   if (valuesFilled) {
-  //     setValuesFilled(false);
-  //     handlUpload();
-  //   }
-  // }, [valuesFilled])
+  useEffect(() => {
+    if (valuesFilled) {
+      setValuesFilled(false);
+      handleUpload();
+    }
+  }, [valuesFilled])
 
   const loadConfig = () => {
     retrieveConfig()
@@ -74,21 +59,9 @@ const UploadPage = () => {
       });
   };
 
-  // useeffect(() => {
-  //   const unsubscribe = navigation.addlistener('focus', () => {
-  //     console.log('in navigation add listener block');
-  //     loaddata();
-  //   return unsubscribe;
-  // }, [navigation]);
-
   const handleUpload = async () => {
     try {
       const client = new HttpClient(baseUrl);
-
-      setSnackMessage(`${JSON.stringify(uploadFile)}`);
-      setShowSnack(true);
-await sleep(LENGTH_LONG);
-
       const result = await client.upload(uploadFile);
 
       if (result) {
@@ -102,7 +75,7 @@ await sleep(LENGTH_LONG);
       setShowSnack(true);
     }
 
-    await sleep(LENGTH_LONG);
+    await sleep();
     history.goBack();
   }
 
@@ -126,20 +99,11 @@ await sleep(LENGTH_LONG);
 
   return (
     <>
-      <AppBar title='Upload' />
+      <AppBar title='Upload' backHref='/Execution' />
       <IonContent className="ion-padding">
         <IonGrid>
           <IonRow className="ion-margin-top ion-padding-top ion-margin-bottom">
             <IonCol size="12">
-              <IonItem>
-                <InputFile
-                  value={uploadFile.name}
-                  placeholder="Upload file"
-                  setFile={setUpload}
-                  fileTypes={['*/*']}
-                />
-              </IonItem>
-
               <IonItem>
                 <IonInput
                   className={`${formValid && 'ion-valid'} ${formValid === false && 'ion-invalid'} ${isTouched && 'ion-touched'}`}
@@ -157,13 +121,11 @@ await sleep(LENGTH_LONG);
                 />
               </IonItem>
 
-              {/* <IonNavLink routerDirection="back" component={() => <Execution />}> */}
               <FormButton
                 title="Upload"
                 onPress={handleUpload}
                 disabled={!formValid}
               />
-              {/* </IonNavLink> */}
             </IonCol>
           </IonRow>
         </IonGrid>

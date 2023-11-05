@@ -1,28 +1,81 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonNavLink, IonProgressBar, IonRow, IonSpinner } from '@ionic/react';
+import { IonCol, IonContent, IonGrid, IonInput, IonRow } from '@ionic/react';
 import { Snackbar } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { RouteComponentProps } from 'react-router';
+import { retrieveConfig } from '../../commons/ConfigStorage';
 import { LENGTH_LONG, sleep } from '../../commons/Constants';
+import { saveToken } from '../../commons/CredentialStorage';
+import { data } from '../../commons/data';
 import validateField from '../../commons/validator/Validator';
 import AppBar from '../../components/AppBar';
+import FormButton from '../../components/FormButton';
 import { HttpException } from '../../http/errors/HttpException';
 import HttpClient from '../../http/services/HttpClient';
-import Execution from '../Execution/Execution';
 import './LoginPage.css';
-import FormButton from '../../components/FormButton';
-import { useHistory } from 'react-router';
-import { saveToken } from '../../commons/CredentialStorage';
 
-const LoginPage = () => {
-  const history = useHistory();
+const LoginPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
   const [showSnack, setShowSnack] = useState(false);
   const [snackMessage, setSnackMessage] = useState("");
-  const [baseUrl, setBaseUrl] = useState("http://192.168.100.129:3000/api");
+  const [baseUrl, setBaseUrl] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [valuesFilled, setValuesFilled] = useState(false);
 
   ///Form Fields
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    setLoaded(false);
+    loadConfig();
+  }, [history]);
+
+  useEffect(() => {
+    if (loaded) {
+      setUsername(data.account.username);
+      setPassword(data.account.password);
+      setValuesFilled(true);
+    }
+  }, [loaded])
+
+  useEffect(() => {
+    if (valuesFilled) {
+      setValuesFilled(false);
+      handleLogin();
+    }
+  }, [valuesFilled])
+
+  const loadConfig = () => {
+    retrieveConfig()
+      .then((config) => {
+        setBaseUrl(config.serverUrl);
+        setLoaded(true);
+      })
+      .catch((error) => {
+        setSnackMessage(`Login loading error: ${error.message}`);
+        setShowSnack(true);
+      });
+  }
+
+  const handleLogin = async () => {
+    try {
+      const client = new HttpClient(baseUrl);
+      const token = await client.login({ username, password });
+
+      if (token) {
+        saveToken(token);
+
+        setSnackMessage(`${token.value}`);
+        setShowSnack(true);
+      }
+    } catch (error) {
+      let err = error as HttpException;
+      setSnackMessage(`${err.status}: Login failed`);
+      setShowSnack(true);
+    }
+
+    await sleep();
+    history.goBack();
+  };
 
   /////// validations START
   const [usernameError, setUsernameError] = useState();
@@ -41,34 +94,9 @@ const LoginPage = () => {
   }, [usernameError, passwordError]);
   /////// END validations
 
-  const handleLogin = async () => {
-    setSnackMessage(`User: ${username}, Pass: ${password}`);
-    setShowSnack(true);
-    console.log(`User: ${username}, Pass: ${password}`);
-
-    try {
-      const client = new HttpClient(baseUrl);
-      const token = await client.login({ username, password });
-
-      if (token) {
-        saveToken(token);
-
-        setSnackMessage(`${token.value}`);
-        setShowSnack(true);
-      }
-    } catch (error) {
-      let err = error as HttpException;
-      setSnackMessage(`${err.status}: Login failed`);
-      setShowSnack(true);
-    }
-
-    await sleep(3000);
-    history.goBack();
-  };
-
   return (
     <>
-      <AppBar title='Login' />
+      <AppBar title='Login' backHref='/Execution' />
       <IonContent className="ion-padding">
         <IonGrid>
           <IonRow>
@@ -104,13 +132,11 @@ const LoginPage = () => {
                 }}
               ></IonInput>
 
-              {/* <IonNavLink routerDirection="back" component={() => <Execution />}> */}
               <FormButton
                 title="Login"
                 onPress={handleLogin}
                 disabled={!formValid}
               />
-              {/* </IonNavLink> */}
             </IonCol>
           </IonRow>
         </IonGrid>

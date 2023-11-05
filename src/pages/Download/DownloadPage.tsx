@@ -1,8 +1,7 @@
-import { IonCol, IonContent, IonGrid, IonInput, IonRow } from "@ionic/react";
-// import { useFocusEffect } from "@react-navigation/native";
+import { IonCol, IonContent, IonGrid, IonInput, IonRow, withIonLifeCycle } from "@ionic/react";
 import { Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+import { RouteComponentProps } from "react-router";
 import { retrieveConfig } from "../../commons/ConfigStorage";
 import { LENGTH_LONG, sleep } from "../../commons/Constants";
 import validateField from "../../commons/validator/Validator";
@@ -12,35 +11,33 @@ import { HttpException } from "../../http/errors/HttpException";
 import HttpClient from "../../http/services/HttpClient";
 import "./DownloadPage.css";
 
-const DownloadPage = () => {
-  const history = useHistory();
+const DownloadPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
   const [showSnack, setShowSnack] = useState(false);
   const [snackMessage, setSnackMessage] = useState("");
 
-  const [baseUrl, setBaseUrl] = useState("http://192.168.100.129:3000/api");
+  const [baseUrl, setBaseUrl] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [valuesFilled, setValuesFilled] = useState(false);
 
   const [fileName, setFileName] = useState("");
 
-  // useFocusEffect(useCallback(() => {
-  //   setLoaded(false);
-  //   loadConfig();
-  // }, []));
+  useEffect(() => {
+    setLoaded(false);
+    loadConfig();
+  }, [history]);
 
-  // useEffect(() => {
-  //   if (loaded) {
-  ////     setFileName("file.png");
-  //     setValuesFilled(true);
-  //   }
-  // }, [loaded])
+  useEffect(() => {
+    if (loaded) {
+      setValuesFilled(true);
+    }
+  }, [loaded])
 
-  // useEffect(() => {
-  //   if (valuesFilled) {
-  //     setValuesFilled(false);
-  //     handleDownload();
-  //   }
-  // }, [valuesFilled])
+  useEffect(() => {
+    if (valuesFilled) {
+      setValuesFilled(false);
+      handleDownload();
+    }
+  }, [valuesFilled])
 
   const loadConfig = () => {
     retrieveConfig()
@@ -54,13 +51,6 @@ const DownloadPage = () => {
         setShowSnack(true);
       });
   };
-
-  // useeffect(() => {
-  //   const unsubscribe = navigation.addlistener('focus', () => {
-  //     console.log('in navigation add listener block');
-  //     loaddata();
-  //   return unsubscribe;
-  // }, [navigation]);
 
   const handleDownload = async () => {
     try {
@@ -103,7 +93,7 @@ const DownloadPage = () => {
 
   return (
     <>
-      <AppBar title='Download' />
+      <AppBar title='Download' backHref='/Execution' />
       <IonContent className="ion-padding">
         <IonGrid>
           <IonRow className="ion-margin-top ion-padding-top ion-margin-bottom">
@@ -123,13 +113,11 @@ const DownloadPage = () => {
                 errorText={fileNameError}
               />
 
-              {/* <IonNavLink routerDirection="back" component={() => <Execution />}> */}
               <FormButton
                 title="Download"
                 onPress={handleDownload}
                 disabled={!formValid}
               />
-              {/* </IonNavLink> */}
             </IonCol>
           </IonRow>
         </IonGrid>
@@ -143,4 +131,4 @@ const DownloadPage = () => {
   );
 };
 
-export default DownloadPage;
+export default withIonLifeCycle(DownloadPage);

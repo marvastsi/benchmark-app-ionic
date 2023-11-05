@@ -35,34 +35,34 @@ const InputFile = (props: InputFileProps) => {
   }, [setFile]);
 
   return (
-      <IonGrid style={styles.fileInputView} >
-        <IonRow>
-          <IonCol size="12" style={styles.columnView}>
-            <IonGrid style={styles.fileInputView}>
-              <IonRow>
-                <IonCol size='10'  style={styles.fileInputView}>
-                  <IonInput
-                    {...props as HTMLAttributes<HTMLIonInputElement>}
-                    style={styles.textInput}
-                    value={value}
-                    autoCorrect="off"
-                    type="url"
-                    readonly={true}
-                  ></IonInput>
-                </IonCol>
-                <IonCol size='2' >
-                  <IonButton
-                    style={styles.iconButton}
-                    onClick={onSelectFile}
-                  >
-                    <IonIcon slot="icon-only" icon={folder}></IonIcon>
-                  </IonButton>
-                </IonCol>
-              </IonRow>
-            </IonGrid>
-          </IonCol>
-        </IonRow>
-      </IonGrid>
+    <IonGrid style={styles.fileInputView} >
+      <IonRow>
+        <IonCol size="12" style={styles.columnView}>
+          <IonGrid style={styles.fileInputView}>
+            <IonRow>
+              <IonCol size='10' style={styles.fileInputView}>
+                <IonInput
+                  {...props as HTMLAttributes<HTMLIonInputElement>}
+                  style={styles.textInput}
+                  value={value}
+                  autoCorrect="off"
+                  type="url"
+                  readonly={true}
+                ></IonInput>
+              </IonCol>
+              <IonCol size='2' >
+                <IonButton
+                  style={styles.iconButton}
+                  onClick={onSelectFile}
+                >
+                  <IonIcon slot="icon-only" icon={folder}></IonIcon>
+                </IonButton>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonCol>
+      </IonRow>
+    </IonGrid>
   );
 }
 
