@@ -1,21 +1,21 @@
-import { IonCol, IonContent, IonGrid, IonInput, IonRow, IonList, IonItem, IonSelect, IonSelectOption, IonCheckbox, IonToggle } from '@ionic/react';
+import { IonCheckbox, IonCol, IonContent, IonGrid, IonInput, IonItem, IonList, IonRow, IonSelect, IonSelectOption, IonToggle } from '@ionic/react';
 import { Snackbar } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { RouteComponentProps } from 'react-router';
+import { retrieveConfig } from '../../commons/ConfigStorage';
 import { LENGTH_LONG, sleep } from '../../commons/Constants';
+import { data } from '../../commons/data';
 import validateField from '../../commons/validator/Validator';
 import AppBar from '../../components/AppBar';
+import FormButton from '../../components/FormButton';
 import { HttpException } from '../../http/errors/HttpException';
 import HttpClient from '../../http/services/HttpClient';
-import Execution from '../Execution/Execution';
 import './AccountPage.css';
-import FormButton from '../../components/FormButton';
-import { useHistory } from 'react-router';
 
-const AccountPage = () => {
-  const history = useHistory();
+const AccountPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
   const [showSnack, setShowSnack] = useState(false);
   const [snackMessage, setSnackMessage] = useState("");
-  const [baseUrl, setBaseUrl] = useState("http://192.168.100.129:3000/api");
+  const [baseUrl, setBaseUrl] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [valuesFilled, setValuesFilled] = useState(false);
 
@@ -29,6 +29,70 @@ const AccountPage = () => {
   const [notification, setNotification] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    setLoaded(false);
+    loadConfig();
+  }, [history]);
+
+  useEffect(() => {
+    if (loaded) {
+      setFirstName(data.account.firstName);
+      setLastName(data.account.lastName);
+      setEmail(data.account.email);
+      setPhoneNumber(data.account.phone);
+      setCountryCode(data.account.countryCode);
+      setActive(data.account.active);
+      setNotification(data.account.notifications);
+      setUsername(data.account.username);
+      setPassword(data.account.password);
+      setValuesFilled(true);
+    }
+  }, [loaded])
+
+  useEffect(() => {
+    if (valuesFilled) {
+      setValuesFilled(false);
+      handleAccount();
+    }
+  }, [valuesFilled])
+
+  const loadConfig = () => {
+    retrieveConfig()
+      .then((config) => {
+        setBaseUrl(config.serverUrl);
+        setLoaded(true);
+      })
+      .catch((error) => {
+        setSnackMessage(`Download loading error: ${error.message}`);
+        setShowSnack(true);
+      });
+  }
+
+  const handleAccount = async () => {
+
+    try {
+      const client = new HttpClient(baseUrl);
+      const AccountCreated = await client.saveAccount({
+        firstName, lastName, email,
+        phoneNumber, phoneCountryCode: countryCode,
+        active, notification,
+        username, password
+      });
+
+      if (AccountCreated) {
+        setSnackMessage(`${JSON.stringify(AccountCreated)}`);
+        setShowSnack(true);
+      }
+    } catch (error) {
+      let err = error as HttpException;
+      setSnackMessage(`${err.status}: Account failed`);
+      setShowSnack(true);
+    }
+
+    await sleep();
+    history.goBack();
+  };
 
   /////// validations START
   const [firstNameError, setFirstNameError] = useState();
@@ -55,31 +119,6 @@ const AccountPage = () => {
     }
   }, [usernameError, passwordError, emailError, phoneNumberError, firstNameError]);
   /////// END validations
-
-  const handleAccount = async () => {
-
-    try {
-      const client = new HttpClient(baseUrl);
-      const AccountCreated = await client.saveAccount({
-        firstName, lastName, email,
-        phoneNumber, phoneCountryCode: countryCode,
-        active, notification,
-        username, password
-      });
-
-      if (AccountCreated) {
-        setSnackMessage(`${JSON.stringify(AccountCreated)}`);
-        setShowSnack(true);
-      }
-    } catch (error) {
-      let err = error as HttpException;
-      setSnackMessage(`${err.status}: Account failed`);
-      setShowSnack(true);
-    }
-
-    await sleep();
-    history.goBack();
-  };
 
   return (
     <>

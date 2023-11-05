@@ -1,9 +1,9 @@
-import { IonCol, IonContent, IonGrid, IonInput, IonItem, IonList, IonNavLink, IonRow, IonSelect, IonSelectOption } from '@ionic/react';
+import { IonCol, IonContent, IonGrid, IonInput, IonItem, IonList, IonRow, IonSelect, IonSelectOption } from '@ionic/react';
 import { Snackbar } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 import { saveConfig } from "../../commons/ConfigStorage";
-import { LENGTH_LONG, sleep } from '../../commons/Constants';
+import { sleep } from '../../commons/Constants';
 import requestPermission from "../../commons/Permissions";
 import validateField from '../../commons/validator/Validator';
 import AppBar from '../../components/AppBar';
@@ -11,20 +11,16 @@ import FormButton from '../../components/FormButton';
 import InputFile from '../../components/InputFile';
 import { Config } from '../../models/Config';
 import { File } from '../../models/File';
-import Execution from '../Execution/Execution';
 import './ConfigPage.css';
 
 
-const ConfigPage = () => {
-  const history = useHistory();
+const ConfigPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
   const [showSnack, setShowSnack] = useState(false);
   const [snackMessage, setSnackMessage] = useState("");
 
   const [isTouchedExecutions, setIsTouchedExecutions] = useState(false);
   const [isTouchedDownload, setIsTouchedDownload] = useState(false);
   const [isTouchedServer, setIsTouchedServer] = useState(false);
-  // const [isTouched, setIsTouched] = useState(false);
-  // const [isTouched, setIsTouched] = useState(false);
   const [formValid, setFormValid] = useState<Boolean>(true);
 
   const [testLoad, setTestLoad] = useState("");

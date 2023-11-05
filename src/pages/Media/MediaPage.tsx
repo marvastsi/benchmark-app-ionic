@@ -19,10 +19,10 @@ const MediaPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
   const [mediaFile, setMediaFile] = useState<MediaFile>({ name: "", path: "" });
   const [url, setUrl] = useState("");
 
-  const finsh = async () => {
-    await sleep();
-    history.goBack();
-  };
+  useEffect(() => {
+    loadConfig();
+    setIsPlaying(true);
+  });
 
   const loadConfig = () => {
     retrieveConfig().then((config: Config) => {
@@ -35,11 +35,6 @@ const MediaPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
   }
 
   useEffect(() => {
-    loadConfig();
-    setIsPlaying(true);
-  });
-
-  useEffect(() => {
     var path = mediaFile.path;
     var ionicPath = Capacitor.convertFileSrc(path);
 
@@ -47,6 +42,11 @@ const MediaPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
     setSnackMessage(ionicPath);
     setShowSnack(true);
   }, [mediaFile])
+
+  const finsh = async () => {
+    await sleep();
+    history.goBack();
+  };
 
   return (
     <>

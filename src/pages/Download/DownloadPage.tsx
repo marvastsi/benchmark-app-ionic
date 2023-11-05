@@ -15,7 +15,7 @@ const DownloadPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) =
   const [showSnack, setShowSnack] = useState(false);
   const [snackMessage, setSnackMessage] = useState("");
 
-  const [baseUrl, setBaseUrl] = useState("http://192.168.100.129:3000/api");
+  const [baseUrl, setBaseUrl] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [valuesFilled, setValuesFilled] = useState(false);
 

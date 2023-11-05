@@ -1,22 +1,22 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonNavLink, IonProgressBar, IonRow, IonSpinner } from '@ionic/react';
+import { IonCol, IonContent, IonGrid, IonInput, IonRow } from '@ionic/react';
 import { Snackbar } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { RouteComponentProps } from 'react-router';
+import { retrieveConfig } from '../../commons/ConfigStorage';
 import { LENGTH_LONG, sleep } from '../../commons/Constants';
+import { saveToken } from '../../commons/CredentialStorage';
+import { data } from '../../commons/data';
 import validateField from '../../commons/validator/Validator';
 import AppBar from '../../components/AppBar';
+import FormButton from '../../components/FormButton';
 import { HttpException } from '../../http/errors/HttpException';
 import HttpClient from '../../http/services/HttpClient';
-import Execution from '../Execution/Execution';
 import './LoginPage.css';
-import FormButton from '../../components/FormButton';
-import { useHistory } from 'react-router';
-import { saveToken } from '../../commons/CredentialStorage';
 
-const LoginPage = () => {
-  const history = useHistory();
+const LoginPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
   const [showSnack, setShowSnack] = useState(false);
   const [snackMessage, setSnackMessage] = useState("");
-  const [baseUrl, setBaseUrl] = useState("http://192.168.100.129:3000/api");
+  const [baseUrl, setBaseUrl] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [valuesFilled, setValuesFilled] = useState(false);
 
@@ -24,22 +24,37 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  /////// validations START
-  const [usernameError, setUsernameError] = useState();
-  const [passwordError, setPasswordError] = useState();
-
-  const [isTouchedPass, setIsTouchedPass] = useState(false);
-  const [isTouchedUsername, setIsTouchedUsername] = useState(false);
-  const [formValid, setFormValid] = useState<Boolean>();
+  useEffect(() => {
+    setLoaded(false);
+    loadConfig();
+  }, [history]);
 
   useEffect(() => {
-    if (usernameError || passwordError) {
-      setFormValid(false);
-    } else {
-      setFormValid(true);
+    if (loaded) {
+      setUsername(data.account.username);
+      setPassword(data.account.password);
+      setValuesFilled(true);
     }
-  }, [usernameError, passwordError]);
-  /////// END validations
+  }, [loaded])
+
+  useEffect(() => {
+    if (valuesFilled) {
+      setValuesFilled(false);
+      handleLogin();
+    }
+  }, [valuesFilled])
+
+  const loadConfig = () => {
+    retrieveConfig()
+      .then((config) => {
+        setBaseUrl(config.serverUrl);
+        setLoaded(true);
+      })
+      .catch((error) => {
+        setSnackMessage(`Download loading error: ${error.message}`);
+        setShowSnack(true);
+      });
+  }
 
   const handleLogin = async () => {
     setSnackMessage(`User: ${username}, Pass: ${password}`);
@@ -65,6 +80,23 @@ const LoginPage = () => {
     await sleep(3000);
     history.goBack();
   };
+
+  /////// validations START
+  const [usernameError, setUsernameError] = useState();
+  const [passwordError, setPasswordError] = useState();
+
+  const [isTouchedPass, setIsTouchedPass] = useState(false);
+  const [isTouchedUsername, setIsTouchedUsername] = useState(false);
+  const [formValid, setFormValid] = useState<Boolean>();
+
+  useEffect(() => {
+    if (usernameError || passwordError) {
+      setFormValid(false);
+    } else {
+      setFormValid(true);
+    }
+  }, [usernameError, passwordError]);
+  /////// END validations
 
   return (
     <>
