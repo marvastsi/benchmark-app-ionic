@@ -3,7 +3,7 @@ import { Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router";
 import { retrieveConfig } from "../../commons/ConfigStorage";
-import { LENGTH_LONG, sleep } from "../../commons/Constants";
+import { sleep } from "../../commons/Constants";
 import validateField from "../../commons/validator/Validator";
 import AppBar from "../../components/AppBar";
 import FormButton from "../../components/FormButton";
@@ -62,11 +62,6 @@ const UploadPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => 
   const handleUpload = async () => {
     try {
       const client = new HttpClient(baseUrl);
-
-      setSnackMessage(`${JSON.stringify(uploadFile)}`);
-      setShowSnack(true);
-      await sleep(LENGTH_LONG);
-
       const result = await client.upload(uploadFile);
 
       if (result) {
@@ -80,7 +75,7 @@ const UploadPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => 
       setShowSnack(true);
     }
 
-    await sleep(LENGTH_LONG);
+    await sleep();
     history.goBack();
   }
 
@@ -104,7 +99,7 @@ const UploadPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => 
 
   return (
     <>
-      <AppBar title='Upload' />
+      <AppBar title='Upload' backHref='/Execution' />
       <IonContent className="ion-padding">
         <IonGrid>
           <IonRow className="ion-margin-top ion-padding-top ion-margin-bottom">
@@ -126,13 +121,11 @@ const UploadPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => 
                 />
               </IonItem>
 
-              {/* <IonNavLink routerDirection="back" component={() => <Execution />}> */}
               <FormButton
                 title="Upload"
                 onPress={handleUpload}
                 disabled={!formValid}
               />
-              {/* </IonNavLink> */}
             </IonCol>
           </IonRow>
         </IonGrid>

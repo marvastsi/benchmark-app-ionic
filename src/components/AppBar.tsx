@@ -1,13 +1,14 @@
-import { IonBackButton, IonButton, IonButtons, IonHeader, IonIcon, IonMenuButton, IonTitle, IonToolbar } from '@ionic/react';
-import React from 'react';
-import { create, ellipsisHorizontal, ellipsisVertical, helpCircle, search, personCircle, star } from 'ionicons/icons';
+import { IonBackButton, IonButton, IonButtons, IonHeader, IonIcon, IonTitle, IonToolbar } from '@ionic/react';
 import Snackbar from '@mui/material/Snackbar';
+import { ellipsisHorizontal, ellipsisVertical } from 'ionicons/icons';
+import React from 'react';
 
-import './AppBar.css';
 import { LENGTH_MEDIUM } from '../commons/Constants';
+import './AppBar.css';
 
 export type AppBarProps = {
   title?: string;
+  backHref?: string;
 }
 
 const AppBar: React.FC<AppBarProps> = (props: AppBarProps) => {
@@ -20,7 +21,10 @@ const AppBar: React.FC<AppBarProps> = (props: AppBarProps) => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonBackButton></IonBackButton>
+            <IonBackButton
+              mode='md'
+              defaultHref={props.backHref}
+            ></IonBackButton>
           </IonButtons>
           <IonTitle>{props.title || ''}</IonTitle>
           <IonButtons slot="end">

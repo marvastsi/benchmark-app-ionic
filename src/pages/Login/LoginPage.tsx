@@ -51,16 +51,12 @@ const LoginPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
         setLoaded(true);
       })
       .catch((error) => {
-        setSnackMessage(`Download loading error: ${error.message}`);
+        setSnackMessage(`Login loading error: ${error.message}`);
         setShowSnack(true);
       });
   }
 
   const handleLogin = async () => {
-    setSnackMessage(`User: ${username}, Pass: ${password}`);
-    setShowSnack(true);
-    console.log(`User: ${username}, Pass: ${password}`);
-
     try {
       const client = new HttpClient(baseUrl);
       const token = await client.login({ username, password });
@@ -77,7 +73,7 @@ const LoginPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
       setShowSnack(true);
     }
 
-    await sleep(3000);
+    await sleep();
     history.goBack();
   };
 
@@ -100,7 +96,7 @@ const LoginPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
 
   return (
     <>
-      <AppBar title='Login' />
+      <AppBar title='Login' backHref='/Execution' />
       <IonContent className="ion-padding">
         <IonGrid>
           <IonRow>
@@ -136,13 +132,11 @@ const LoginPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
                 }}
               ></IonInput>
 
-              {/* <IonNavLink routerDirection="back" component={() => <Execution />}> */}
               <FormButton
                 title="Login"
                 onPress={handleLogin}
                 disabled={!formValid}
               />
-              {/* </IonNavLink> */}
             </IonCol>
           </IonRow>
         </IonGrid>

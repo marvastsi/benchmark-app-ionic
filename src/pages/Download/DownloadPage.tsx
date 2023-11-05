@@ -1,7 +1,7 @@
-import { IonCol, IonContent, IonGrid, IonInput, IonRow, useIonViewWillEnter, withIonLifeCycle } from "@ionic/react";
+import { IonCol, IonContent, IonGrid, IonInput, IonRow, withIonLifeCycle } from "@ionic/react";
 import { Snackbar } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
-import { RouteComponentProps, useHistory } from "react-router";
+import { useEffect, useState } from "react";
+import { RouteComponentProps } from "react-router";
 import { retrieveConfig } from "../../commons/ConfigStorage";
 import { LENGTH_LONG, sleep } from "../../commons/Constants";
 import validateField from "../../commons/validator/Validator";
@@ -28,7 +28,6 @@ const DownloadPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) =
 
   useEffect(() => {
     if (loaded) {
-  //     setFileName("file.png");
       setValuesFilled(true);
     }
   }, [loaded])
@@ -52,14 +51,6 @@ const DownloadPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) =
         setShowSnack(true);
       });
   };
-
-  // What is navigation here????????
-  // useeffect(() => {
-  //   const unsubscribe = navigation.addlistener('focus', () => {
-  //     console.log('in navigation add listener block');
-  //     loaddata();
-  //   return unsubscribe;
-  // }, [navigation]);
 
   const handleDownload = async () => {
     try {
@@ -102,7 +93,7 @@ const DownloadPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) =
 
   return (
     <>
-      <AppBar title='Download' />
+      <AppBar title='Download' backHref='/Execution' />
       <IonContent className="ion-padding">
         <IonGrid>
           <IonRow className="ion-margin-top ion-padding-top ion-margin-bottom">
@@ -122,13 +113,11 @@ const DownloadPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) =
                 errorText={fileNameError}
               />
 
-              {/* <IonNavLink routerDirection="back" component={() => <Execution />}> */}
               <FormButton
                 title="Download"
                 onPress={handleDownload}
                 disabled={!formValid}
               />
-              {/* </IonNavLink> */}
             </IonCol>
           </IonRow>
         </IonGrid>

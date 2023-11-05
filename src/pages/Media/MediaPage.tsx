@@ -1,5 +1,5 @@
-import { IonContent, IonText } from "@ionic/react";
 import { Capacitor } from '@capacitor/core';
+import { IonContent, IonText } from "@ionic/react";
 import { Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
@@ -50,7 +50,7 @@ const MediaPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
 
   return (
     <>
-      <AppBar title='Media' />
+      <AppBar title='Media' backHref='/Execution' />
       <IonContent className="ion-padding">
         <IonText>{mediaFile.name}</IonText>
 

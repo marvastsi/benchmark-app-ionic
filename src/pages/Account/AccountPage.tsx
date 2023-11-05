@@ -43,6 +43,8 @@ const AccountPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) =>
       setPhoneNumber(data.account.phone);
       setCountryCode(data.account.countryCode);
       setActive(data.account.active);
+      setSnackMessage(`IS Active??  ${data.account.active}`);
+      setShowSnack(true);
       setNotification(data.account.notifications);
       setUsername(data.account.username);
       setPassword(data.account.password);
@@ -64,7 +66,7 @@ const AccountPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) =>
         setLoaded(true);
       })
       .catch((error) => {
-        setSnackMessage(`Download loading error: ${error.message}`);
+        setSnackMessage(`Account loading error: ${error.message}`);
         setShowSnack(true);
       });
   }
@@ -122,7 +124,7 @@ const AccountPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) =>
 
   return (
     <>
-      <AppBar title='Account' />
+      <AppBar title='Account' backHref='/Execution' />
       <IonContent className="ion-padding">
         <IonGrid>
           <IonRow >
@@ -210,6 +212,7 @@ const AccountPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) =>
                       color="success"
                       onIonChange={(e) => setActive(e.detail.checked)}
                       value={active}
+                      checked={active}
                     >Active</IonCheckbox>
                   </IonCol>
                   <IonCol>
@@ -253,13 +256,11 @@ const AccountPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) =>
                 }}
               ></IonInput>
 
-              {/* <IonNavLink routerDirection="back" component={() => <Execution />}> */}
               <FormButton
                 title="Save Account"
                 onPress={handleAccount}
                 disabled={!formValid}
               />
-              {/* </IonNavLink> */}
             </IonCol>
           </IonRow>
         </IonGrid>

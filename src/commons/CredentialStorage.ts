@@ -1,4 +1,4 @@
-import {Storage} from "@ionic/storage";
+import { Storage } from "@ionic/storage";
 import { Token } from "../models/Credentials";
 
 const storage = new Storage();

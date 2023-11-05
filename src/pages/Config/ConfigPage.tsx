@@ -31,7 +31,6 @@ const ConfigPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => 
   const [scenario, setScenario] = useState(0);
 
   useEffect(() => {
-
     requestPermission()
       .then(() => {
         console.log(`Permissions Granted`);

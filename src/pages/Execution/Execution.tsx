@@ -1,30 +1,28 @@
-import { IonButton, IonContent, IonItem, IonTitle, useIonRouter, withIonLifeCycle } from '@ionic/react';
+import { IonButton, IonContent, IonItem, IonTitle, withIonLifeCycle } from '@ionic/react';
+import React from 'react';
+import { RouteComponentProps } from 'react-router';
 import AppBar from '../../components/AppBar';
 import './Execution.css';
 
-const Execution = () => {
-  const ionRouter = useIonRouter();
-
+const Execution: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
   return (
     <>
       <AppBar title='Green Benchmark' />
       <IonContent className="ion-padding">
         <IonTitle>Click the button to start.</IonTitle>
-        {/* <IonNavLink routerDirection="forward" component={() => <Login />}> */}
         <IonItem>
           <IonButton
             onClick={(event) => {
               event.preventDefault();
-              ionRouter.push("Login", "forward", "push");
+              history.push("Login", "forward");
             }}
           >Login</IonButton>
-          {/* </IonNavLink> */}
         </IonItem>
         <IonItem>
           <IonButton
             onClick={(event) => {
               event.preventDefault();
-              ionRouter.push("Account", "forward", "push");
+              history.push("Account", "forward");
             }}
           >Account</IonButton>
         </IonItem>
@@ -32,7 +30,7 @@ const Execution = () => {
           <IonButton
             onClick={(event) => {
               event.preventDefault();
-              ionRouter.push("Download", "forward", "push");
+              history.push("Download", "forward");
             }}
           >Download</IonButton>
         </IonItem>
@@ -40,7 +38,7 @@ const Execution = () => {
           <IonButton
             onClick={(event) => {
               event.preventDefault();
-              ionRouter.push("Upload", "forward", "push");
+              history.push("Upload", "forward");
             }}
           >Upload</IonButton>
         </IonItem>
@@ -48,7 +46,7 @@ const Execution = () => {
           <IonButton
             onClick={(event) => {
               event.preventDefault();
-              ionRouter.push("Media", "forward", "push");
+              history.push("Media", "forward");
             }}
           >Media</IonButton>
         </IonItem>

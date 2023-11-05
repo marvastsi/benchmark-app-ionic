@@ -13,7 +13,7 @@ const requestPermission = async () => {
             }
         }
     } catch (err) {
-        console.error(">>>>> " + err);
+        console.error("ERROR: " + err);
         throw err
     }
 };
