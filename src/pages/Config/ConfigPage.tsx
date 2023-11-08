@@ -3,7 +3,7 @@ import { Snackbar } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { saveConfig } from "../../commons/ConfigStorage";
-import { sleep } from '../../commons/Constants';
+import { LENGTH_MEDIUM, sleep } from '../../commons/Constants';
 import requestPermission from "../../commons/Permissions";
 import validateField from '../../commons/validator/Validator';
 import AppBar from '../../components/AppBar';
@@ -76,7 +76,7 @@ const ConfigPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => 
     }
 
     await sleep();
-    history.push('/Execution');
+    history.push('Execution', "forward");
   };
 
   /////// validations SATRT
@@ -198,7 +198,7 @@ const ConfigPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => 
       </IonContent>
       <Snackbar
         open={showSnack}
-        autoHideDuration={10000}
+        autoHideDuration={LENGTH_MEDIUM}
         message={snackMessage}
       />
     </>
