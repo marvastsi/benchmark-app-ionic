@@ -83,8 +83,6 @@ const ConfigPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => 
   const [executionsError, setExecutionsError] = useState();
   const [donwaloadFileError, setDonwaloadFileError] = useState();
   const [serverUrlError, setServerUrlError] = useState();
-  const [mediaFileError, setMediaFileError] = useState();
-  const [uploadFileError, setUploadFileError] = useState();
 
   useEffect(() => {
     if (donwaloadFileError || executionsError || serverUrlError) {

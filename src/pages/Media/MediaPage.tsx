@@ -39,11 +39,11 @@ const MediaPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
     var ionicPath = Capacitor.convertFileSrc(path);
 
     setUrl(ionicPath);
-    // setSnackMessage(ionicPath);
-    // setShowSnack(true);
   }, [mediaFile])
 
   const finsh = async () => {
+    setSnackMessage(`Media Executed`);
+    setShowSnack(true);
     await sleep();
     history.goBack();
   };
