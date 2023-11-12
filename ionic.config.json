@@ -1,13 +1,7 @@
 {
-  "name": "app_ionic",
+  "name": "benchmark-ionic-react-app",
   "integrations": {
-    "cordova": {}
+    "capacitor": {}
   },
-  "type": "ionic1",
-  "watchPatterns": [
-    "scss/**/*",
-    "www/**/*",
-    "!www/lib/**/*",
-    "!www/**/*.map"
-  ]
+  "type": "react-vite"
 }
