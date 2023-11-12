@@ -3,7 +3,7 @@ import { Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router";
 import { retrieveConfig } from "../../commons/ConfigStorage";
-import { sleep } from "../../commons/Constants";
+import { LENGTH_MEDIUM, sleep } from "../../commons/Constants";
 import validateField from "../../commons/validator/Validator";
 import AppBar from "../../components/AppBar";
 import FormButton from "../../components/FormButton";
@@ -132,7 +132,7 @@ const UploadPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => 
       </IonContent>
       <Snackbar
         open={showSnack}
-        autoHideDuration={10000}
+        autoHideDuration={LENGTH_MEDIUM}
         message={snackMessage}
       />
     </>

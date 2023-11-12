@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { RouteComponentProps } from "react-router";
 import { retrieveConfig } from "../../commons/ConfigStorage";
-import { LENGTH_LONG, sleep } from "../../commons/Constants";
+import { LENGTH_MEDIUM, sleep } from "../../commons/Constants";
 import AppBar from "../../components/AppBar";
 import { Config } from "../../models/Config";
 import { MediaFile } from "../../models/MediaFile";
@@ -39,11 +39,11 @@ const MediaPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
     var ionicPath = Capacitor.convertFileSrc(path);
 
     setUrl(ionicPath);
-    setSnackMessage(ionicPath);
-    setShowSnack(true);
   }, [mediaFile])
 
   const finsh = async () => {
+    setSnackMessage(`Media Executed`);
+    setShowSnack(true);
     await sleep();
     history.goBack();
   };
@@ -69,7 +69,7 @@ const MediaPage: React.FC<RouteComponentProps> = ({/*location,*/ history }) => {
       </IonContent>
       <Snackbar
         open={showSnack}
-        autoHideDuration={LENGTH_LONG}
+        autoHideDuration={LENGTH_MEDIUM}
         message={snackMessage}
       />
     </>
