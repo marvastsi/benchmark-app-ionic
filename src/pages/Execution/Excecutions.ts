@@ -23,6 +23,37 @@ export interface IExecution {
 }
 
 const _generateExecutions = (config: Config): Array<Scenario> => {
+    let group = 5;
+    if (config.specificScenario == 0 ||  config.specificScenario == 1 || config.specificScenario == 2) {
+        group= 1;
+    } else if (config.specificScenario == 3 || config.specificScenario == 4) {
+        group= 3;
+    } else {
+        group= 5;
+    }
+
+    if (group >= 0 && group < 5) {
+        let list = new Array<Scenario>();
+
+        for (let i = 0; i < config.testLoad; i++) {
+            if (i % 2 == 0) {
+                list.push(group);
+            } else {
+                list.push( (group + 1) );
+            }
+        }
+
+        return list;
+    } else {
+        let list = new Array<Scenario>();
+        for (let i = 0; i < config.testLoad; i++) {
+            list.push(group);
+        }
+        return list;
+    }
+}
+
+const _generateExecutions_copy = (config: Config): Array<Scenario> => {
     if (config.specificScenario > 0) {
         let list = new Array<Scenario>();
 

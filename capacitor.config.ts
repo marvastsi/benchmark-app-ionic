@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'benchmark-ionic-react-app',
   webDir: 'dist',
   server: {
-    androidScheme: 'https'
+    androidScheme: 'http'
   }
 };
 
